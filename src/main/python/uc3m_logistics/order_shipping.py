@@ -3,7 +3,7 @@ from datetime import datetime
 import hashlib
 
 class OrderShipping():
-    """Class representing an appoinment  for the vaccination of a patient"""
+    """Class representing an appointment  for the vaccination of a patient"""
 
     def __init__( self, product_id, order_id, delivery_phone_number, order_type ):
         self.__alg = "SHA-256"

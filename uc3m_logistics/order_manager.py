@@ -8,4 +8,5 @@ class OrderManager:
     @staticmethod
     def validate_ean13(ean13_code):
         """RETURNs TRUE IF THE CODE RECEIVED IS A VALID EAN13, OR FALSE IN OTHER CASE"""
+
         return True
