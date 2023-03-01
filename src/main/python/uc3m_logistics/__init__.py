@@ -1,4 +1,4 @@
-"""UC3M LOGISTICS MODULE WITH ALL THE FEATURES REQUIRED FOR ACCESS CONTROL"""
+"""SECURE ALL MODULE WITH ALL THE FEATURES REQUIRED FOR ACCESS CONTROL"""
 
 from .order_request import OrderRequest
 from .order_manager import OrderManager
