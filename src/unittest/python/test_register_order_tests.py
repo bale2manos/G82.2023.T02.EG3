@@ -1,12 +1,13 @@
-from unittest import TestCase, main
+"""class for testing the regsiter_order method"""
+import unittest
 from uc3m_logistics import OrderManager
 
-
-class RegisterOrderTests(TestCase):   # para cada funcion una clase
-    """Tests for register_order function"""
-    def test_something(self):
+class MyTestCase(unittest.TestCase):
+    """class for testing the register_order method"""
+    def test_something( self ):
+        """dummy test"""
         self.assertEqual(True, False)
 
 
 if __name__ == '__main__':
-    main()
+    unittest.main()
