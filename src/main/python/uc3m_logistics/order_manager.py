@@ -48,7 +48,7 @@ class OrderManager:
         order_request = OrderRequest(product_id, order_type, address,
                         phone_number, zip_code)
         # write order request to file
-        with open("../stores/order_requests.json","w", encoding="utf-8") as file:
+        with open("../stores/order_requests.json", "w", encoding="utf-8") as file:
             data = json.load(file)
             data.append(order_request)
             json.dump(data, file)
