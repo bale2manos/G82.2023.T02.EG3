@@ -57,7 +57,7 @@ class OrderRequest:
         return self.__time_stamp
 
     @property
-    def order_id( self ):
+    def order_id(self):
         """Returns the md5 signature"""
         return hashlib.md5(self.__str__().encode()).hexdigest()
 
