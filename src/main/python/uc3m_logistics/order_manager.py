@@ -1,10 +1,8 @@
 """Module """
 import json
 import re
-from datetime import datetime
 from .order_request import OrderRequest
 from .order_management_exception import OrderManagementException
-from .order_shipping import OrderShipping
 
 class OrderManager:
     """Class for providing the methods for managing the vaccination process"""
@@ -45,13 +43,6 @@ class OrderManager:
     def send_product (self, input_file:str) -> str:
         """FUNCIÓN 2: Devuelve un String en hexadecimal que representa el código de
         seguimiento del envío """
-        if not self.validate_input_file(input_file):
-            raise OrderManagementException("Invalid input file")
-        file = open(input_file, "r", encoding="utf-8")
-        if 1==1:#dudas
-
-            orderShipping = OrderShipping("SHA-256", "UC3M", file["OrderId"], datetime.utcnow(), )
-
         raise NotImplementedError("falta por hacer")
 
 
@@ -112,27 +103,3 @@ class OrderManager:
         if not isinstance(zip_code, int):
             return False
         return re.search("^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$", zip_code)
-
-    @classmethod
-    def validate_input_file(cls, input_file):
-        """Validates JSON file containing the input information for the order request"""
-        try:
-            with open(input_file, "r", encoding="utf-8") as file:
-                data = json.load(file)
-                if not isinstance(data, dict) \
-                        or "OrderID" not in data or "ContactEmail" not in data:
-                    return False
-                if not isinstance(data["OrderID"], str) \
-                        or not re.match("^[a-fA-F0-9]{32}$", data["OrderID"]):
-                    return False
-                if not isinstance(data["ContactEmail"], str) \
-                        or not re.match(r"[^@]+@[^@]+\.[^@]+", data["ContactEmail"]):
-                    return False
-                return True
-        except FileNotFoundError:
-            print("File not found")
-            return False
-        except ValueError:
-            print("Invalid JSON")
-            return False
-
