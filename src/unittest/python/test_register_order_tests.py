@@ -28,19 +28,47 @@ class MyTestCase(unittest.TestCase):
         pass
 
     @freeze_time("2023-03-08")
-    def test_something( self ):
-        """dummy test"""
+    def test_CE_V_1_2_4_9_10(self):
+        """All parameters okay, check output"""
         my_order = OrderManager()
         value = my_order.register_order("8421691423220", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
                                         "+34123456789", 28005)
-        self.assertEqual(True, False)
+        hex_pattern = "0[xX][0-9a-fA-F]+"
+        #self.assertEqual(value, )
+        self.assertTrue(re.search(hex_pattern, value))
 
     @freeze_time("2023-03-08")
-    def test_product_id_invalid_str( self ):
-        """dummy test"""
+    def test_CE_V_5(self):
+        my_order = OrderManager()
+        value = my_order.register_order("8421691423220", "PREMIUM",	"C/LISBOA,4, MADRID, SPAIN",
+                                        "+34123456789", 28005)
+        self.ass
+
+    @freeze_time("2023-03-08")
+    def test_CE_V_6(self):
+        my_order = OrderManager()
+        value = my_order.register_order("8421691423220", "REGULAR",	"CALLE EJEMPLOPRUEBA",
+                                        "+34123456789", 28005)
+
+    @freeze_time("2023-03-08")
+    def test_CE_V_7(self):
+        my_order = OrderManager()
+        value = my_order.register_order("8421691423220", "REGULAR",	"CALLE EJEMPLODECALLEPARAHACERLAPRUEBAEJEMPLOPARAHACERLAPRUEBAEJEMPLOPARAHACERLAPRUEBAEJEMPLOPARAHAC",
+                                        "+34123456789", 28005)
+
+    @freeze_time("2023-03-08")
+    def test_CE_V_8(self):
+        my_order = OrderManager()
+        value = my_order.register_order("8421691423220", "REGULAR", "CALLE EJEMPLOPARAHACERPRUEBASEJEMPLOPARAHACERPRUEBASEJEMPLOPARAHACERPRUEBASEJEMPLOPARAHACERPRUEBASEJ",
+                                        "+34123456789", 28005)
+
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_1(self):
+        """Product ID not a number"""
         my_order = OrderManager()
         with self.assertRaises(OrderManagementException) as cm:
-            value = my_order.register_order("8421691423220", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
+            my_order.register_order("842169142322A", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
                                         "+34123456789", 28005)
         self.assertEqual("Invalide EAN13 string", cm.exception.message)
 

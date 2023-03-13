@@ -20,7 +20,7 @@ class OrderManager:
         if not self.validate_order_type(order_type):
             raise OrderManagementException("Invalid order type")
         if not self.validate_address(address):
-            raise OrderManagementException("Invalid order type")
+            raise OrderManagementException("Invalid address")
         if not self.validate_phone_number(phone_number):
             raise OrderManagementException("Invalid phone number")
         if not self.validate_zip_code(zip_code):
