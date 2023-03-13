@@ -33,34 +33,37 @@ class MyTestCase(unittest.TestCase):
         my_order = OrderManager()
         value = my_order.register_order("8421691423220", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
                                         "+34123456789", 28005)
-        hex_pattern = "0[xX][0-9a-fA-F]+"
-        #self.assertEqual(value, )
-        self.assertTrue(re.search(hex_pattern, value))
+        #hex_pattern = "0[xX][0-9a-fA-F]+"
+        self.assertEqual(value, "944f15e32a64345933979293a7244fa9")
+        #self.assertTrue(re.search(hex_pattern, value))
 
     @freeze_time("2023-03-08")
     def test_CE_V_5(self):
         my_order = OrderManager()
         value = my_order.register_order("8421691423220", "PREMIUM",	"C/LISBOA,4, MADRID, SPAIN",
                                         "+34123456789", 28005)
-        self.ass
+        self.assertEqual(value, "99a5c8ff0f471baca42ca20ddac530c7" )
 
     @freeze_time("2023-03-08")
     def test_CE_V_6(self):
         my_order = OrderManager()
         value = my_order.register_order("8421691423220", "REGULAR",	"CALLE EJEMPLOPRUEBA",
                                         "+34123456789", 28005)
+        self.assertEqual(value, "39aa8497dc4bb47c2b686d33f7260250")
 
     @freeze_time("2023-03-08")
     def test_CE_V_7(self):
         my_order = OrderManager()
         value = my_order.register_order("8421691423220", "REGULAR",	"CALLE EJEMPLODECALLEPARAHACERLAPRUEBAEJEMPLOPARAHACERLAPRUEBAEJEMPLOPARAHACERLAPRUEBAEJEMPLOPARAHAC",
                                         "+34123456789", 28005)
+        self.assertEqual(value, "7abd2c1a7670c00af61752679cf27882")
 
     @freeze_time("2023-03-08")
     def test_CE_V_8(self):
         my_order = OrderManager()
         value = my_order.register_order("8421691423220", "REGULAR", "CALLE EJEMPLOPARAHACERPRUEBASEJEMPLOPARAHACERPRUEBASEJEMPLOPARAHACERPRUEBASEJEMPLOPARAHACERPRUEBASEJ",
                                         "+34123456789", 28005)
+        self.assertEqual(value, "385af0b83ecd8ba8816af3248e091844")
 
 
     @freeze_time("2023-03-08")
