@@ -1,4 +1,5 @@
 """class for testing the regsiter_order method"""
+import re
 import unittest
 import os
 from uc3m_logistics import OrderManager, OrderManagementException
@@ -73,7 +74,130 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(OrderManagementException) as cm:
             my_order.register_order("842169142322A", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
                                         "+34123456789", 28005)
-        self.assertEqual("Invalide EAN13 string", cm.exception.message)
+        self.assertEqual("Invalid product id", cm.exception.message)
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_2(self):
+        """Product ID not an EAN13"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423225", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
+                                        "+34123456789", 28005)
+        self.assertEqual("Invalid product id", cm.exception.message)
+
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_3(self):
+        """Order Type other str"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "POTATO",	"C/LISBOA,4, MADRID, SPAIN",
+                                        "+34123456789", 28005)
+        self.assertEqual("Invalid order type", cm.exception.message)
+
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_4(self):
+        """Order Type not a str"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", 123,	"C/LISBOA,4, MADRID, SPAIN",
+                                        "+34123456789", 28005)
+        self.assertEqual("Invalid order type", cm.exception.message)
+
+    def test_CE_NV_5(self):
+        """Address not a str"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR",	"3435445 7890",
+                                        "+34123456789", 28005)
+        self.assertEqual("Invalid address", cm.exception.message)
+
+
+    def test_CE_NV_6(self):
+        """Address less than minimum chars(19)"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR",	"C/PO,4, PATA, SPAIN",
+                                        "+34123456789", 28005)
+        self.assertEqual("Invalid address", cm.exception.message)
+
+    def test_CE_NV_7(self):
+        """Address over maximum chars(101)"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR",	"C/ EJEMPLO PARA DIRECCION CON EL NUMERO DE CARACTERES POR DEBAJO JUSTO DEL NUMERON, 14, MADRID, SPAIN",
+                                        "+34123456789", 28005)
+        self.assertEqual("Invalid address", cm.exception.message)
+
+    def test_CE_NV_8(self):
+        """Address does not have a space"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR",	"CALLEPO4PATASPAIN",
+                                        "+34123456789", 28005)
+        self.assertEqual("Invalid address", cm.exception.message)
+
+    def test_CE_NV_9(self):
+        """Phone less than minimum digits(11)"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
+                                        "+34123456", 28005)
+        self.assertEqual("Invalid phone number", cm.exception.message)
+
+
+    def test_CE_NV_10(self):
+        """Phone over maximum digits(14)"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
+                                        "+3412345679777", 28005)
+        self.assertEqual("Invalid phone number", cm.exception.message)
+
+    def test_CE_NV_12(self):
+        """Phone without + at the beggining"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR",	"C/LISBOA,4, MADRID, SPAIN",
+                                        "34123456789", 28005)
+        self.assertEqual("Invalid phone number", cm.exception.message)
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_13(self):
+        """Phone number not a str"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR", "C/LISBOA,4, MADRID, SPAIN",
+                                    34123456789, 28005)
+        self.assertEqual("Invalid phone number", cm.exception.message)
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_15(self):
+        """Zip Code not valid"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR", "C/LISBOA,4, MADRID, SPAIN",
+                                            "+34123456789", 618005)
+        self.assertEqual("Invalid zip code", cm.exception.message)
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_16(self):
+        """Output file incorrect"""
+        JSON_FILES_PATH = str(Path.home()) + "/PycharmProjects/DSoftware/G82.2023.T02.EG3/src/python/stores"
+        file_store = JSON_FILES_PATH + "order_product.json"
+        if os.path.isfile(file_store):
+            os.remove(file_store)
+        raise NotImplementedError("No implementado")
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_17(self):
+        """Output file incorrect"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            value = my_order.register_order("8421691423220", "REGULAR", "C/LISBOA,4, MADRID, SPAIN",
+                                    "+34123456789", 618005)
+        self.assertEqual(value, "lo q tenga q salir")
 
     @freeze_time("2023-03-08")
     def test_json_file(self):

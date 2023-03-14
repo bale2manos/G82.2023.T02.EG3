@@ -11,7 +11,7 @@ class OrderManager:
 
     # LAS OTRAS 3 FUNCIONES + AUXILIARES(no comporobarlas)
     def register_order (self, product_id: int, order_type: str, address:str,
-                        phone_number: int, zip_code: int):
+                        phone_number: str, zip_code: int):
         """FUNCIÓN 1"""
         # validar inputs con funciones auxiliares
 
@@ -84,7 +84,7 @@ class OrderManager:
     def validate_order_type(cls, order_type):
         if not isinstance(order_type, str):
             return False
-        if order_type not in ("Regular", "Premium"):
+        if order_type.upper() not in ("REGULAR", "PREMIUM"):
             return False
         return True
     @classmethod
@@ -95,11 +95,12 @@ class OrderManager:
 
     @classmethod
     def validate_phone_number(cls, phone_number):
-        if not isinstance(phone_number, int):
+        if not isinstance(phone_number, str):
             return False
-        return re.search("^[0-9]{9}$", phone_number)
+        phone_pattern = "^\+[0-9]{11,13}$"
+        return re.search(phone_pattern, phone_number)
     @classmethod
     def validate_zip_code(cls, zip_code):
         if not isinstance(zip_code, int):
             return False
-        return re.search("^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$", zip_code)
+        return re.search("^(?:0[1-9]|[1-4]\d|5[0-2])\d{3}$", str(zip_code))
