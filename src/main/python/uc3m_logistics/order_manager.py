@@ -2,6 +2,7 @@
 import json
 import re
 from .order_request import OrderRequest
+from .order_shipping import OrderShipping
 from .order_management_exception import OrderManagementException
 
 class OrderManager:
@@ -30,12 +31,16 @@ class OrderManager:
         # crear order request object
         order_request = OrderRequest(product_id, order_type, address,
                         phone_number, zip_code)
-        # write order request to file
-        with open("../stores/order_requests.json", "w", encoding="utf-8") as file:
-            data = json.load(file)
-            data.append(order_request)
-            json.dump(data, file)
-
+        # wr.ite order request to file
+        try:
+            with open("../stores/order_requests.json", "w", encoding="utf-8") as file:
+                data = json.load(file)
+                data.append(order_request)
+                json.dump(data, file)
+        except FileNotFoundError:
+            raise OrderManagementException("File not found")
+        except Exception:
+            raise OrderManagementException("Unexpected error opening file")
 
 
         return order_request.order_id()
@@ -43,7 +48,12 @@ class OrderManager:
     def send_product (self, input_file:str) -> str:
         """FUNCIÓN 2: Devuelve un String en hexadecimal que representa el código de
         seguimiento del envío """
-        raise NotImplementedError("falta por hacer")
+        # TODO falta comprobar posibles errores, no se como hacerlo
+        with open(input_file, "r", encoding="utf-8") as file:
+            data = json.load(file)
+        order_shipping = OrderShipping(data["product_id"], data["order_id"],
+                                       data["phone_number"], data["order_type"])
+        return order_shipping.tracking_code
 
 
     def deliver_product(self, tracking_number:str) -> bool:

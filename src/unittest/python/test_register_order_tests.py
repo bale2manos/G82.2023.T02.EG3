@@ -1,5 +1,4 @@
 """class for testing the regsiter_order method"""
-import re
 import unittest
 import os
 from uc3m_logistics import OrderManager, OrderManagementException
@@ -183,21 +182,34 @@ class MyTestCase(unittest.TestCase):
 
     @freeze_time("2023-03-08")
     def test_CE_NV_16(self):
-        """Output file incorrect"""
+        """Order id not correct"""
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            value = my_order.register_order("8421691423220", "REGULAR", "C/LISBOA,4, MADRID, SPAIN",
+                                            "+34123456789", 618005)
+        self.assertEqual(value, "lo q tenga q salir")
+
+    @freeze_time("2023-03-08")
+    def test_CE_NV_17(self):
+        """File does not exist"""
+        JSON_FILES_PATH = str(Path.home()) + "/PycharmProjects/DSoftware/G82.2023.T02.EG3/src/python/stores"
+        file_store = JSON_FILES_PATH + "order_product.json"
+        if os.path.isfile(file_store):
+            os.remove(file_store)
+        my_order = OrderManager()
+        with self.assertRaises(OrderManagementException) as cm:
+            my_order.register_order("8421691423220", "REGULAR", "C/LISBOA,4, MADRID, SPAIN",
+                                            "+34123456789", 28005)
+        self.assertEqual("File not found", cm.exception.message)
+
+
+    def test_CE_NV_18(self):
+        """Error al decodificar el JSON""" # TODO no se como hacer
         JSON_FILES_PATH = str(Path.home()) + "/PycharmProjects/DSoftware/G82.2023.T02.EG3/src/python/stores"
         file_store = JSON_FILES_PATH + "order_product.json"
         if os.path.isfile(file_store):
             os.remove(file_store)
         raise NotImplementedError("No implementado")
-
-    @freeze_time("2023-03-08")
-    def test_CE_NV_17(self):
-        """Output file incorrect"""
-        my_order = OrderManager()
-        with self.assertRaises(OrderManagementException) as cm:
-            value = my_order.register_order("8421691423220", "REGULAR", "C/LISBOA,4, MADRID, SPAIN",
-                                    "+34123456789", 618005)
-        self.assertEqual(value, "lo q tenga q salir")
 
     @freeze_time("2023-03-08")
     def test_json_file(self):
